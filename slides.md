@@ -73,7 +73,7 @@ createUser =
       either handleError handleSuccess
   where
     handleError _ = throwError err400
-    handleSucces _ = pure NoContent
+    handleSuccess _ = pure NoContent
 ```
 
 <details role="note">
@@ -280,6 +280,7 @@ general ServerT version.
 ```haskell
 
 
+
 server :: Env -> Server API
 server env =
     hoistServer @API Proxy withEnv handlers
@@ -370,7 +371,7 @@ Note the return type (i've added parens for clarity)
 
 ```haskell
 type API =
-  Auth '[BasicAuth] User -> UserEndpoints
+  Auth '[BasicAuth] User :> UserEndpoints
 
 type UserEndpoints = Regular :<|> Admin
 ```
@@ -437,7 +438,7 @@ We can do so by using the previously defined ensureAdmin.
 
 -------------------------------------------
 
-# Why not middlewares?
+## Why not middlewares?
 
 -------------------------------------------
 
@@ -497,4 +498,10 @@ regular middlewares, and it retains type-safety
 That's the most common pitfall, and it's easy to get lost
 in servant's type errors
 </details>
+
+-------------------------------------------
+
+# Conclusion
+
+[Macaroons with servant](http://blog.clement.delafargue.name/posts/2018-07-19-bake-delicious-macaroon-burritos-with-servant.html)
 
