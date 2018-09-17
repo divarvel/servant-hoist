@@ -12,7 +12,7 @@
 ## Servant
 
 <details role="note">
-Servant is an ensemble of libraries designed
+Servant is an collection of libraries designed
 to work with HTTP APIs
 </details>
 
@@ -77,8 +77,8 @@ createUser =
 ```
 
 <details role="note">
-Handler allows you to do IO, and to
-return non-200 http codes with throwError.
+`Handler` allows you to do IO, and to
+return non-200 HTTP codes with `throwError`.
 It focuses on the data types, rather than HTTP itself
 </details>
 
@@ -175,7 +175,7 @@ app = serve @API Proxy handlers
 ```
 
 <details role="note">
-The TypeApplications extension is quite useful in this context,
+The `TypeApplications` extension is quite useful in this context,
 I'll use it from now on to have terser code
 </details>
 
@@ -236,7 +236,7 @@ data Env = Env
 ```
 
 <details role="note">
-In our case, we'll need the base url (to construct absolute URLs)
+In our case, we'll need the base URL (to construct absolute URLs)
 and access to the DB pool
 </details>
 
@@ -254,7 +254,7 @@ listUsers =
 ```
 
 <details role="note">
-This way we can access the DB pool in our handlers. Since Handler
+This way we can access the DB pool in our handlers. Since `Handler`
 is already a monad, we use the transformer version of Reader, to
 add Reader capabilities to the handler.
 </details>
@@ -269,8 +269,8 @@ handlers = ... -- same as before
 ```
 
 <details role="note">
-Note that Server is specialized for Handler, so we need to use the more
-general ServerT version.
+Note that `Server` is specialized for `Handler`, so we need to use the more
+general `ServerT` version.
 </details>
 
 -------------------------------------------
@@ -290,9 +290,9 @@ server env =
 ```
 
 <details role="note">
-And now the magic. We wrap everything in hoistServer, and we provide
-a function transforming MyHandler into Handler. In our case it's
-runReaderT
+And now the magic. We wrap everything in `hoistServer`, and we provide
+a function transforming `MyHandler` into `Handler`. In our case it's
+`runReaderT`
 </details>
 
 -------------------------------------------
@@ -306,10 +306,10 @@ hoistServer :: HasServer api '[]
 ```
 
 <details role="note">
-HasServer is servant's internal type-families-based machinery.
+`HasServer` is servant's internal type-families-based machinery.
 What's important is that we can go from a handler m to handler n.
-In our case, m is MyHandler, n is Handler. We can put all our endpoints
-in the monads we want as long as we end up with a Handler.
+In our case, m is `MyHandler`, n is `Handler`. We can put all our endpoints
+in the monads we want as long as we end up with a `Handler`.
 </details>
 
 -------------------------------------------
@@ -317,8 +317,8 @@ in the monads we want as long as we end up with a Handler.
 ## `forall x. m x -> n x`
 
 <details role="note">
-Note that it does not mention Handler at all. So we can chain as many
-transformations as we want, as long as the last one gives us a Handler.
+Note that it does not mention `Handler` at all. So we can chain as many
+transformations as we want, as long as the last one gives us a `Handler`.
 </details>
 
 -------------------------------------------
@@ -344,7 +344,7 @@ deleteEverything =
 ```
 
 <details role="note">
-HasAdmin wraps around our custom handler. It allows us
+`HasAdmin` wraps around our custom handler. It allows us
 to declare endpoints with extended capabilities.
 I've omitted all the instances derivation, to let it
 delegate to the inner handler.
@@ -364,7 +364,7 @@ ensureAdmin user (HasAdmin handler)
 <details role="note">
 Given a user, and an admin-only handler, we can either
 delegate to the handler or generate an error.
-Note the return type (i've added parens for clarity)
+Note the return type (I've added parens for clarity)
 </details>
 
 -------------------------------------------
@@ -379,7 +379,7 @@ type UserEndpoints = Regular :<|> Admin
 <details role="note">
 All the endpoints are now protected with basic auth
 (the endpoints will take a User parameter)
-The protected enpoints are either regular (all users)
+The protected endpoints are either regular (all users)
 or admin-only
 </details>
 
@@ -447,7 +447,7 @@ We can do so by using the previously defined ensureAdmin.
 <details role="note">
 Not suited for application-level stuff (not visible
 in the types). Kludges like vault. It's good protocol-
-level stuff (http redirs, etc), but not much more,
+level stuff (HTTP redirs, etc), but not much more,
 and it's for the whole application (or you need to
 inspect the requests in the middlewares and that's a
 shadow router. not good)
@@ -458,7 +458,7 @@ shadow router. not good)
 # Conclusion
 
 - don't thread environment manually,
-- use ReaderT
+- use `ReaderT`
 
 <details role="note">
 Most common use case, it comes up fast
@@ -481,7 +481,7 @@ maintenance easier
 
 # Conclusion
 
-- annotate / protect whole API trees with hoistServer
+- annotate / protect whole API trees with `hoistServer`
 
 <details role="note">
 For application-level concerns, it's way better than
